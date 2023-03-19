@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+  <form action="/products/add" method="POST">
+    <div class="form-check">
+      <label for="name">Name</label>
+      <input type="text"
+             class="form-control"
+             id="name"
+             name="name"
+             th:value="(${product}!=null ? ${product.get().name}:'')"
+             required
+             placeholder="Enter product name">
+    </div>
+    <br>
+    <div class="form-check">
+      <label for="description">Description</label>
+      <input type="text"
+             class="form-control"
+             name="description"
+             th:value="(${product}!=null ? ${product.get().description}:'')"
+             id="description"
+             placeholder="Enter product description">
+    </div>
+    <br>
+    <div class="form-check">
+      <label for="quantity">Quantity</label>
+      <input type="number"
+             min="1"
+             step="any"
+             name="quantity"
+             class="form-control"
+             th:value="(${product}!=null ? ${product.get().quantity}:0)"
+             id="quantity"
+             placeholder="Enter product quantity"/>
+    </div>
+    <br>
+    <div class="form-check">
+      <label for="price">Price</label>
+      <input type="number"
+             min="1"
+             step="any"
+             name="price"
+             class="form-control"
+             th:value="(${product}!=null ? ${product.get().price}:0)"
+             id="price"
+             placeholder="Enter product price"/>
+    </div>
+    <br>
+    <div class="form-check">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+  </form>
+</body>
+</html>
