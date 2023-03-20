@@ -1,9 +1,14 @@
 package com.example.eshopapplication.entity;
 
+import com.example.eshopapplication.entity.Enum.Role;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -13,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="users")
-public class User
+public class User implements UserDetails
 {
     private static final long serialVersionUID = 1L;
 
@@ -21,20 +26,42 @@ public class User
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false)
+    private String username;
     private String name;
 
-    @Column(nullable=false, unique=true)
     private String email;
 
-    @Column(nullable=false)
     private String password;
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    private List<ShoppingCart> shoppingCarts=new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private boolean isAccountNonExpired = true;
+    private boolean isAccountNonLocked = true;
+    private boolean isCredentialsNonExpired = true;
+    private boolean isEnabled = true;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(role);
+    }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(
-            name="users_roles",
-            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
-            inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
-    private List<Role> roles = new ArrayList<>();
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 }

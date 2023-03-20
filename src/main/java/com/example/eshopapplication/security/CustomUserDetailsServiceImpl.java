@@ -1,6 +1,6 @@
 package com.example.eshopapplication.security;
 
-import com.example.eshopapplication.entity.Role;
+import com.example.eshopapplication.entity.Enum.Role;
 import com.example.eshopapplication.entity.User;
 import com.example.eshopapplication.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +29,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(user.getEmail(),
                     user.getPassword(),
-                    mapRolesToAuthorities(user.getRoles()));
+                    mapRolesToAuthorities(Collections.singleton(user.getRole())));
         }else{
             throw new UsernameNotFoundException("Invalid username or password.");
         }
@@ -35,7 +37,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Collection <Role> roles) {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(List.of(role).toString()))
                 .collect(Collectors.toList());
     }
 }

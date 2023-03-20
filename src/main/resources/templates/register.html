@@ -43,31 +43,31 @@
                         th:object="${user}"
                 >
                     <div class="form-group mb-3">
-                        <label class="form-label">First Name</label>
+                        <label class="form-label">Username</label>
                         <input
                                 class="form-control"
-                                id="firstName"
-                                name="firstName"
-                                placeholder="Enter first name"
-                                th:field="*{firstName}"
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                                th:field="*{username}"
                                 type="text"
                         />
-                        <p th:errors = "*{firstName}" class="text-danger"
-                           th:if="${#fields.hasErrors('firstName')}"></p>
+                        <p th:errors = "*{username}" class="text-danger"
+                           th:if="${#fields.hasErrors('username')}"></p>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label">Last Name</label>
+                        <label class="form-label">Name</label>
                         <input
                                 class="form-control"
-                                id="lastName"
-                                name="lastName"
-                                placeholder="Enter last name"
-                                th:field="*{lastName}"
+                                id="name"
+                                name="name"
+                                placeholder="Enter your name"
+                                th:field="*{name}"
                                 type="text"
                         />
-                        <p th:errors = "*{lastName}" class="text-danger"
-                           th:if="${#fields.hasErrors('lastName')}"></p>
+                        <p th:errors = "*{name}" class="text-danger"
+                           th:if="${#fields.hasErrors('name')}"></p>
                     </div>
 
                     <div class="form-group mb-3">

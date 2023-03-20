@@ -1,5 +1,6 @@
 package com.example.eshopapplication.config;
 
+import com.example.eshopapplication.entity.Enum.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,9 +28,9 @@ public class SpringSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.antMatchers("/register/**").permitAll()
+                        authorize.mvcMatchers("/register", "/login").permitAll()
                                 .antMatchers("/index").permitAll()
-                                .antMatchers("/users").hasRole("ADMIN")
+                                .antMatchers("/users").hasRole(Role.ADMIN.getAuthority())
                 )
                 .formLogin(
                         form -> form

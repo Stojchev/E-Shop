@@ -3,6 +3,7 @@ package com.example.eshopapplication.controller;
 import com.example.eshopapplication.dto.UserDto;
 import com.example.eshopapplication.entity.User;
 import com.example.eshopapplication.service.UserService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -33,14 +34,22 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginForm() {
-        return "login";
+    public String loginForm(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return "login";
+        }
+        return "redirect:/index";
     }
     @GetMapping("register")
     public String showRegistrationForm(Model model){
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
-        return "register";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            UserDto user = new UserDto();
+            model.addAttribute("user", user);
+            return "register";
+        }
+        return "redirect:/index";
     }
 
     @PostMapping("/register/save")
@@ -49,11 +58,11 @@ public class AuthController {
                                Model model){
         User existing = userService.findUserByEmail(user.getEmail());
         if (existing != null) {
-            result.rejectValue("email", null, "There is already an account registered with that email");
+            result.rejectValue("email", "6969", "There is already an account registered with that email");
         }
         if (result.hasErrors()) {
             model.addAttribute("user", user);
-            return "register";
+            return "redirect:/login";
         }
         userService.saveUser(user);
         return "redirect:/register?success";
@@ -63,7 +72,7 @@ public class AuthController {
     public String listRegisteredUsers(Model model){
         List<UserDto> users = userService.findAllUsers();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        model.addAttribute("user", auth.getPrincipal());
+        model.addAttribute("user", auth.getAuthorities());
         model.addAttribute("users", users);
         return "users";
     }

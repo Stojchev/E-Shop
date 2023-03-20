@@ -21,8 +21,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="product : ${products}">
-      <td th:text="${product.getId()}"></td>
+    <tr th:each="product,iter : ${products}">
+      <td th:text="${iter.index+1}"></td>
       <th scope="row" th:text="${product.getName()}"></th>
       <td th:text="${product.getDescription()}"></td>
       <td th:text="${product.getQuantity()}"></td>
