@@ -3,8 +3,11 @@ package com.example.eshopapplication.controller;
 import com.example.eshopapplication.dto.UserDto;
 import com.example.eshopapplication.entity.User;
 import com.example.eshopapplication.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +15,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:3000")
@@ -75,5 +81,15 @@ public class AuthController {
         model.addAttribute("user", auth.getAuthorities());
         model.addAttribute("users", users);
         return "users";
+    }
+    @GetMapping("/accessDenied")
+    public String getAccessDenied(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("[ADMIN]"))) {
+            System.out.println("ADMIN E");
+        }
+        if (auth != null)
+            auth.getAuthorities().forEach(System.out::println);
+        return "/access-denied";
     }
 }

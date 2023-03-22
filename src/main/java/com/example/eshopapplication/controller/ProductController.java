@@ -1,7 +1,6 @@
 package com.example.eshopapplication.controller;
 
 import com.example.eshopapplication.service.ProductService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +42,10 @@ public class ProductController {
             model.addAttribute("product",productService.findById(id));
             return "product/add-products";
         }
+        return "product/add-products";
+    }
+    @GetMapping("/accessDenied")
+    private String asd(){
         return "product/add-products";
     }
     @PostMapping("/delete/{id}")
