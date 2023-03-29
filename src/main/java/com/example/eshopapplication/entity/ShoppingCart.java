@@ -2,6 +2,8 @@ package com.example.eshopapplication.entity;
 
 import com.example.eshopapplication.entity.Enum.ShoppingCartStatus;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Data
 @Entity
+@Getter
+@Setter
 public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

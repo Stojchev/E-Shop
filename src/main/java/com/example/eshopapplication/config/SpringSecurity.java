@@ -30,13 +30,13 @@ public class SpringSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.anyRequest().authenticated()
+                        authorize
                                 .mvcMatchers("/users").hasAuthority("ADMIN")
-                                .mvcMatchers("/products/**").hasAuthority("ADMIN")
-                                .mvcMatchers("/users", "").hasRole("ROLE_USER")
-                                .mvcMatchers("/register", "/login").permitAll()
-                                .mvcMatchers("/logout").hasAuthority("ADMIN")
-                                .mvcMatchers("/index").permitAll()
+//                                .mvcMatchers("/products/**").hasAuthority("ADMIN")
+//                                .mvcMatchers("/users", "").hasRole("ROLE_USER")
+//                                .mvcMatchers("/register", "/login").permitAll()
+//                                .mvcMatchers("/logout").hasAuthority("ADMIN")
+//                                .mvcMatchers("/index").permitAll()
                 )
                 .exceptionHandling()
                 .accessDeniedPage("/accessDenied")
@@ -45,7 +45,7 @@ public class SpringSecurity {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/users")
+                                .defaultSuccessUrl("/")
                                 .permitAll()
                 ).logout(
                         logout -> logout

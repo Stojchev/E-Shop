@@ -39,6 +39,13 @@
             <i class="fa fa-trash">Delete</i>
           </button>
         </form>
+        <form th:action="@{'/products/addToCart/{id}' (id=${product.getId()})}"
+              th:method="POST">
+          <button type="submit"
+                  class="btn btn-sm btn-primary">
+            <i class="fa fa-trash">Add to cart</i>
+          </button>
+        </form>
       </td>
     </tr>
     </tbody>
