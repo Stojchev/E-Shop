@@ -9,9 +9,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/products")
@@ -41,11 +44,10 @@ public class ProductController {
     private String getAddProductPage(@RequestParam String name,
                                      @RequestParam String description,
                                      @RequestParam Integer quantity,
-                                     @RequestParam Double price){
-//        System.out.println(name+" " + description);
-//        System.out.println(quantity+" " + price);
-        productService.save(name,description,quantity,price);
-//        System.out.println(productService.findAll());
+                                     @RequestParam Double price,
+                                     @RequestParam String photo){
+//        String fileName = StringUtils.cleanPath(Objects.requireNonNull(photo.getOriginalFilename()));
+        productService.save(name,description,quantity,price,photo);
         return "redirect:/products/all";
     }
     @GetMapping("/edit/{id}")

@@ -22,8 +22,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void save(String name, String description, Integer quantity, Double price) {
-        productRepository.save(new Product(name, description, quantity, price));
+    public void save(String name, String description, Integer quantity, Double price,String photo) {
+        productRepository.save(new Product(name, description, quantity, price,photo));
     }
 
     @Override
@@ -31,6 +31,12 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
         productRepository.findById(id);
     }
+
+//    @Override
+//    public void setPhoto(String photo) {
+//        productRepository.
+//    }
+
     @Override
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);

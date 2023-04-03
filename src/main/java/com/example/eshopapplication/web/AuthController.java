@@ -27,8 +27,10 @@ public class AuthController {
         this.shoppingCartService = shoppingCartService;
     }
     @PostMapping("/login")
-    public String loginPost(){
-        return "index";
+    public String loginPost(Model model){
+        model.addAttribute("body_content","login");
+        model.addAttribute("headerAndFooter",false);
+        return "master-template";
     }
 
     @GetMapping("/login")
@@ -36,6 +38,7 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             model.addAttribute("body_content","login");
+            model.addAttribute("headerAndFooter",false);
             return "master-template";
         }
         return "redirect:/";
@@ -47,6 +50,7 @@ public class AuthController {
             UserDto user = new UserDto();
             model.addAttribute("user", user);
             model.addAttribute("body_content","register");
+            model.addAttribute("headerAndFooter",false);
             return "master-template";
         }
         return "redirect:/";
