@@ -1,10 +1,10 @@
 package com.example.eshopapplication.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,13 +18,21 @@ public class Product {
     private double price;
     @Column(length = 64)
     private String photo;
+    @OneToMany
+    private List<Category> categories=new ArrayList<>();
 
-    public Product(String name, String description, Integer quantity, double price, String photo) {
+    public Product(String name,
+                   String description,
+                   Integer quantity,
+                   double price,
+                   String photo,
+                   Category category) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.photo = photo;
+        this.categories.add(category);
     }
 
     public Product(String name, String description, Integer quantity, double price) {
@@ -32,6 +40,14 @@ public class Product {
         this.description = description;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public Product(String name, String description, Integer quantity, double price, String photo) {
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.photo = photo;
     }
 
     public Product() {

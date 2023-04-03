@@ -1,0 +1,23 @@
+<section>
+  <div class="container">
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${categories != null}" th:each="category,iter : ${categories}">
+        <td th:text="${iter.index+1}"></td>
+        <td th:text="${category.getName()}"></td>
+        <td th:text="${category.getDescription()}"></td>
+      </tr>
+      <tr th:unless="${categories != null}" >
+        <td colspan="3" th:text="There are not categories. Create new category!"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
