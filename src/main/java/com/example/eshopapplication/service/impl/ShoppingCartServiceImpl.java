@@ -15,6 +15,7 @@ import com.example.eshopapplication.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -63,5 +64,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     ShoppingCart cart = new ShoppingCart(user);
                     return this.shoppingCartRepository.save(cart);
                 });
+    }
+
+    @Override
+    public void deleteProductFromShoppingCart(Long id) throws ProductNotFoundException {
+        Product product= productRepository.findById(id).orElseThrow(()->new ProductNotFoundException(id));
+        List<ShoppingCart> shoppingCarts= shoppingCartRepository.findAll();
+        for(ShoppingCart sc : shoppingCarts){
+            shoppingCartRepository.delete(sc);
+            List<Product> products= sc.getProductList();
+            products.remove(product);
+            sc.setProductList(products);
+            shoppingCartRepository.save(sc);
+        }
     }
 }

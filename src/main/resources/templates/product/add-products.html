@@ -1,4 +1,4 @@
-<section xmlns:sec="http://www.w3.org/1999/xhtml">
+<section xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/html">
   <div sec:authorize="!isAuthenticated()">
     Please log in to add new products!
   </div>
@@ -9,7 +9,7 @@
              class="form-control"
              id="name"
              name="name"
-             th:value="(${product}!=null ? ${product.get().name}:'')"
+             th:value="(${product}!=null ? ${product.getName()}:'')"
              required
              placeholder="Enter product name">
     </div>
@@ -19,7 +19,7 @@
       <input type="text"
              class="form-control"
              name="description"
-             th:value="(${product}!=null ? ${product.get().description}:'')"
+             th:value="(${product}!=null ? ${product.getDescription()}:'')"
              id="description"
              placeholder="Enter product description">
     </div>
@@ -31,7 +31,7 @@
              step="any"
              name="quantity"
              class="form-control"
-             th:value="(${product}!=null ? ${product.get().quantity}:0)"
+             th:value="(${product}!=null ? ${product.getQuantity()}:0)"
              id="quantity"
              placeholder="Enter product quantity"/>
     </div>
@@ -43,17 +43,39 @@
              step="any"
              name="price"
              class="form-control"
-             th:value="(${product}!=null ? ${product.get().price}:0)"
+             th:value="(${product}!=null ? ${product.getPrice()}:0)"
              id="price"
              placeholder="Enter product price"/>
     </div>
     <div class="form-check">
-      <label for="photo">Price</label>
+      <label for="photo">Photo</label>
       <input type="text"
              name="photo"
              class="form-control"
-             th:value="(${product}!=null ? ${product.get().photo}:'')"
              id="photo"/>
+    </div>
+    <div class="form-check">
+      <div>
+        <label>Category:<br>
+          <input type="checkbox" name="categories"
+                 th:each="category : ${categories}"
+                 th:checked="${product.getCategories().}"
+                 th:text="${category.getName()}"
+                 th:value="${category.getId()}"
+          />
+        </label>
+      </div>
+      <div>
+<!--        <label>Category:<br>-->
+<!--          <span th:text="${product.getCategories()}"></span>-->
+<!--&lt;!&ndash;          <input type="checkbox" name="categories"&ndash;&gt;-->
+<!--&lt;!&ndash;                 th:each="category : ${categories}"&ndash;&gt;-->
+<!--&lt;!&ndash;                 th:checked="${product.getCategories().contains(category.getName())}"&ndash;&gt;-->
+<!--&lt;!&ndash;                 th:text="${category.getName()}"&ndash;&gt;-->
+<!--&lt;!&ndash;                 th:value="${category.getId()}"&ndash;&gt;-->
+<!--&lt;!&ndash;          />&ndash;&gt;-->
+<!--        </label>-->
+      </div>
     </div>
     <br>
     <div class="form-check">

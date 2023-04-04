@@ -21,18 +21,22 @@ public class Product {
     @OneToMany
     private List<Category> categories=new ArrayList<>();
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
     public Product(String name,
                    String description,
                    Integer quantity,
                    double price,
                    String photo,
-                   Category category) {
+                   List<Category> category) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.photo = photo;
-        this.categories.add(category);
+        this.categories=category;
     }
 
     public Product(String name, String description, Integer quantity, double price) {
@@ -53,4 +57,7 @@ public class Product {
     public Product() {
 
     }
+//    public boolean checkIfCategory(String cat){
+//        return categories.contains()
+//    }
 }

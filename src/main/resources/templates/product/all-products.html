@@ -6,7 +6,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
-                <th scope="col">Quantity</th>
+                <th scope="col">Category</th>
                 <th scope="col">Price</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -17,7 +17,11 @@
                 <td th:text="${product.getPhoto()}"></td>
                 <th scope="row" th:text="${product.getName()}"></th>
                 <td th:text="${product.getDescription()}"></td>
-                <td th:text="${product.getQuantity()}"></td>
+                <td>
+                    <p th:each="cat: ${product.getCategories()}">
+                        <span th:text="${cat.getName()}"></span>
+                    </p>
+                </td>
                 <td th:text="${product.getPrice()}"></td>
                 <td>
                     <a th:href="@{'/products/edit/{id}' (id=${product.getId()})}"

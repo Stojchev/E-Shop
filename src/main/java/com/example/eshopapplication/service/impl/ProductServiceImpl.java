@@ -1,5 +1,6 @@
 package com.example.eshopapplication.service.impl;
 
+import com.example.eshopapplication.entity.Category;
 import com.example.eshopapplication.entity.Product;
 import com.example.eshopapplication.repository.ProductRepository;
 import com.example.eshopapplication.service.ProductService;
@@ -22,9 +23,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void save(String name, String description, Integer quantity, Double price,String photo) {
-        productRepository.save(new Product(name, description, quantity, price,photo));
+    public void save(String name, String description, Integer quantity, Double price, String photo, List<Category> categories) {
+        productRepository.save(new Product(name, description, quantity, price,photo,categories));
     }
+
+//    @Override
+//    public void save(String name, String description, Integer quantity, Double price,String photo) {
+//        productRepository.save(new Product(name, description, quantity, price,photo));
+//    }
 
     @Override
     public void deleteById(Long id) {

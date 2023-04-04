@@ -25,7 +25,7 @@ public class ShoppingCart {
     private ShoppingCartStatus status;
     @ManyToOne
     private User user;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Product> productList;
 
     public ShoppingCart() {

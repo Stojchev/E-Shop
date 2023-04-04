@@ -1,30 +1,38 @@
 package com.example.eshopapplication.web;
 
+import com.example.eshopapplication.entity.Category;
+import com.example.eshopapplication.entity.Product;
 import com.example.eshopapplication.entity.ShoppingCart;
 import com.example.eshopapplication.entity.exception.ProductAlreadyInShoppingCartException;
 import com.example.eshopapplication.entity.exception.ProductNotFoundException;
+import com.example.eshopapplication.repository.UserRepository;
+import com.example.eshopapplication.service.CategoryService;
 import com.example.eshopapplication.service.ProductService;
 import com.example.eshopapplication.service.ShoppingCartService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
+    private final UserRepository userRepository;
+    private final CategoryService categoryService;
     private final ShoppingCartService shoppingCartService;
 
-    public ProductController(ProductService productService, ShoppingCartService shoppingCartService) {
+    public ProductController(ProductService productService, UserRepository userRepository, CategoryService categoryService, ShoppingCartService shoppingCartService) {
         this.productService = productService;
+        this.userRepository = userRepository;
+        this.categoryService = categoryService;
         this.shoppingCartService = shoppingCartService;
     }
 
@@ -38,6 +46,7 @@ public class ProductController {
     @GetMapping("/add")
     private String getAddProductPage(Model model){
         model.addAttribute("body_content","product/add-products");
+        model.addAttribute("categories" , categoryService.listCategories());
         return "master-template";
     }
     @PostMapping("/add")
@@ -45,16 +54,21 @@ public class ProductController {
                                      @RequestParam String description,
                                      @RequestParam Integer quantity,
                                      @RequestParam Double price,
-                                     @RequestParam String photo){
-//        String fileName = StringUtils.cleanPath(Objects.requireNonNull(photo.getOriginalFilename()));
-        productService.save(name,description,quantity,price,photo);
+                                     @RequestParam String photo,
+                                     @RequestParam List<Integer> categories){
+        List<Category> categoryList=new ArrayList<>();
+        for(Integer i: categories)
+            categoryList.add(categoryService.listCategories().get(i-1));
+        productService.save(name,description,quantity,price,photo,categoryList);
         return "redirect:/products/all";
     }
     @GetMapping("/edit/{id}")
-    private String getProductById(@PathVariable Long id,Model model){
+    private String getProductById(@PathVariable Long id,Model model) throws ProductNotFoundException {
         model.addAttribute("body_content","product/add-products");
+        model.addAttribute("categories" , categoryService.listCategories());
+        Product product=productService.findById(id).orElseThrow(()-> new ProductNotFoundException(id));
         if(productService.findById(id).isPresent()){
-            model.addAttribute("product",productService.findById(id));
+            model.addAttribute("product",product);
             return "master-template";
         }
         return "master-template";
@@ -65,7 +79,8 @@ public class ProductController {
         return "master-template";
     }
     @PostMapping("/delete/{id}")
-    private String deleteProductById(@PathVariable Long id){
+    private String deleteProductById(@PathVariable Long id) throws ProductNotFoundException {
+        shoppingCartService.deleteProductFromShoppingCart(id);
         productService.deleteById(id);
         return "redirect:/products/all";
     }

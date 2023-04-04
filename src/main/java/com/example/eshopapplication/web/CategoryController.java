@@ -25,7 +25,6 @@ public class CategoryController {
     }
     @GetMapping("/create")
     private String addCategoryPage(Model model){
-//        model.addAttribute("categories",categoryService.listCategories());
         model.addAttribute("body_content","category/createCategory");
         return "master-template";
     }

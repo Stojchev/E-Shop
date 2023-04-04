@@ -12,4 +12,5 @@ public interface ShoppingCartService {
 
     void addProductToShoppingCart(String username, Long productId) throws ProductAlreadyInShoppingCartException, ProductNotFoundException;
     ShoppingCart getActiveShoppingCart(String username);
+    void deleteProductFromShoppingCart(Long id) throws ProductNotFoundException;
 }
