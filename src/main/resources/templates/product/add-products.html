@@ -2,7 +2,7 @@
   <div sec:authorize="!isAuthenticated()">
     Please log in to add new products!
   </div>
-  <form sec:authorize="isAuthenticated()" action="/products/add" method="POST">
+  <form sec:authorize="isAuthenticated()" action="/products/add" method="POST" enctype="multipart/form-data">
     <input id="id" type="hidden" name="id" th:value="(${product} != null ? ${product.getId()} : '')">
     <div class="form-check">
       <label for="name">Name</label>
@@ -50,9 +50,10 @@
     </div>
     <div class="form-check">
       <label for="photo">Photo</label>
-      <input type="text"
+      <input type="file"
              name="photo"
              class="form-control"
+             accept="image/png, image/jpeg"
              id="photo"/>
     </div>
     <div class="form-check">

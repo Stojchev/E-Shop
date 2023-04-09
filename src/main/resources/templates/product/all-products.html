@@ -14,7 +14,9 @@
             <tbody>
             <tr th:each="product,iter : ${products}">
                 <th>
-                    <img th:src="${product.getPhoto()}" style="width: 100px;height: 100px; object-fit: contain" th:data-uri="${product.getPhoto()}"  alt="Test"/>
+                    <img th:src="'C:/Users/angel/Desktop/e-shop-application/src/main/java/images/products/' + ${product.getName()} + '/' + ${product.getPhoto()}" style="width: 100px;height: 100px; object-fit: contain" th:data-uri="${product.getPhoto()}"  alt="Test"/>
+                    C:\Users\angel\Desktop\e-shop-application\src\main\java\images\products\asd\Black Minimal Motivation Quote LinkedIn Banner.png
+                    <img src="C:/Users/angel/Desktop/e-shop-application/src/main/java/images/products/asd/Black Minimal Motivation Quote LinkedIn Banner.png"/>
                 </th>
                 <th scope="row" th:text="${product.getName()}"></th>
                 <th scope="row" th:text="${product.getPrice()}"></th>
