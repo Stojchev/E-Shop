@@ -3,6 +3,7 @@
     Please log in to add new products!
   </div>
   <form sec:authorize="isAuthenticated()" action="/products/add" method="POST">
+    <input id="id" type="hidden" name="id" th:value="(${product} != null ? ${product.getId()} : '')">
     <div class="form-check">
       <label for="name">Name</label>
       <input type="text"
@@ -57,12 +58,13 @@
     <div class="form-check">
       <div>
         <label>Category:<br>
-          <input type="checkbox" name="categories"
-                 th:each="category : ${categories}"
-                 th:checked="${product.getCategories().}"
-                 th:text="${category.getName()}"
-                 th:value="${category.getId()}"
-          />
+          <div th:each="category : ${categories}">
+            <label>
+              <input type="checkbox" name="categories" th:value="${category.id}"
+                     th:checked="${product?.categories?.contains(category)}"/>
+              <span th:text="${category.name}"></span>
+            </label>
+          </div>
         </label>
       </div>
       <div>

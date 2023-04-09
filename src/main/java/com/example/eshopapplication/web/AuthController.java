@@ -6,6 +6,7 @@ import com.example.eshopapplication.service.ShoppingCartService;
 import com.example.eshopapplication.service.UserService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,6 +79,14 @@ public class AuthController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("user", auth.getAuthorities());
         model.addAttribute("users", users);
+        System.out.println("USER ROLE "+auth.getAuthorities());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            System.out.println("ALL USER ROLES");
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                System.out.println(authority.getAuthority());
+            }
+        }
         model.addAttribute("body_content","users");
         return "master-template";
     }

@@ -1,10 +1,17 @@
 package com.example.eshopapplication.entity;
 
 import lombok.Data;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,11 +23,19 @@ public class Product {
     private String description;
     private Integer quantity;
     private double price;
-    @Column(length = 64)
+    @Column(length = 256)
     private String photo;
-    @OneToMany
+    @ManyToMany
     private List<Category> categories=new ArrayList<>();
 
+//    public void addImages(List<MultipartFile> files) throws IOException {
+//        for (MultipartFile file : files) {
+//            String fileName = UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
+//            Path path = Paths.get("/path/to/image/directory", fileName);
+//            Files.write(path, file.getBytes());
+//            imageUrls.add(fileName);
+//        }
+//    }
     public List<Category> getCategories() {
         return categories;
     }

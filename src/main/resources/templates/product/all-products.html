@@ -3,26 +3,30 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Id</th>
+                <th scope="col">Image</th>
                 <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Category</th>
                 <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Category</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="product,iter : ${products}">
-                <td th:text="${iter.index+1}"></td>
-                <td th:text="${product.getPhoto()}"></td>
+                <th>
+                    <img th:src="${product.getPhoto()}" style="width: 100px;height: 100px; object-fit: contain" th:data-uri="${product.getPhoto()}"  alt="Test"/>
+                </th>
                 <th scope="row" th:text="${product.getName()}"></th>
-                <td th:text="${product.getDescription()}"></td>
+                <th scope="row" th:text="${product.getPrice()}"></th>
+                <th scope="row" th:text="${product.getQuantity()}"></th>
                 <td>
-                    <p th:each="cat: ${product.getCategories()}">
-                        <span th:text="${cat.getName()}"></span>
-                    </p>
+                    <span th:each="category : ${product.getCategories()}">
+                        <span th:text="${category.getName()}">
+                        </span>
+                    </span>
+                    <span th:unless="${not #lists.isEmpty(product.getCategories())}" th:text="None">
+                    </span>
                 </td>
-                <td th:text="${product.getPrice()}"></td>
                 <td>
                     <a th:href="@{'/products/edit/{id}' (id=${product.getId()})}"
                        class="btn btn-sm btn-info edit-product">

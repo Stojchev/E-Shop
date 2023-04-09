@@ -50,23 +50,32 @@ public class ProductController {
         return "master-template";
     }
     @PostMapping("/add")
-    private String getAddProductPage(@RequestParam String name,
+    private String getAddProductPage(@RequestParam(required = false) Long id,
+                                     @RequestParam String name,
                                      @RequestParam String description,
                                      @RequestParam Integer quantity,
                                      @RequestParam Double price,
                                      @RequestParam String photo,
-                                     @RequestParam List<Integer> categories){
+                                     @RequestParam(required = false) List<Integer> categories) throws ProductNotFoundException {
         List<Category> categoryList=new ArrayList<>();
-        for(Integer i: categories)
-            categoryList.add(categoryService.listCategories().get(i-1));
-        productService.save(name,description,quantity,price,photo,categoryList);
+        if(categories!=null)
+            for(Integer i: categories)
+                categoryList.add(categoryService.listCategories().get(i-1));
+        else categoryList=null;
+        if (id != null) {
+            this.productService.edit(id,name,description,quantity,price,photo,categoryList);
+        } else {
+            productService.save(name,description,quantity,price,photo,categoryList);
+        }
         return "redirect:/products/all";
     }
     @GetMapping("/edit/{id}")
     private String getProductById(@PathVariable Long id,Model model) throws ProductNotFoundException {
         model.addAttribute("body_content","product/add-products");
-        model.addAttribute("categories" , categoryService.listCategories());
+//        model.addAttribute("categories" , categoryService.listCategories());
         Product product=productService.findById(id).orElseThrow(()-> new ProductNotFoundException(id));
+        model.addAttribute("categories" , categoryService.listCategories());
+//        product.getCategories();
         if(productService.findById(id).isPresent()){
             model.addAttribute("product",product);
             return "master-template";

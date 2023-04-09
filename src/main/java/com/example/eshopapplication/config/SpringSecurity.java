@@ -26,35 +26,66 @@ public class SpringSecurity {
         this.passwordEncoder = new BCryptPasswordEncoder(10);
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .mvcMatchers("/users").hasAuthority("ADMIN")
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//                .authorizeHttpRequests(
+//                        (authorize) ->
+//                        authorize
+//                                .mvcMatchers("/users").hasAuthority("ADMIN")
+//                                .mvcMatchers("/asdasdasd").hasAuthority("ADMIN")
 //                                .mvcMatchers("/products/**").hasAuthority("ADMIN")
 //                                .mvcMatchers("/users", "").hasRole("ROLE_USER")
 //                                .mvcMatchers("/register", "/login").permitAll()
 //                                .mvcMatchers("/logout").hasAuthority("ADMIN")
 //                                .mvcMatchers("/index").permitAll()
-                )
-                .exceptionHandling()
-                .accessDeniedPage("/accessDenied")
-                .and()
-                .formLogin(
-                        form -> form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/")
-                                .permitAll()
-                ).logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .permitAll()
-                );
-        return http.build();
-    }
-
+//                )
+//                .exceptionHandling()
+//                .accessDeniedPage("/accessDenied")
+//                .and()
+//                .formLogin(
+//                        form -> form
+//                                .loginPage("/login")
+//                                .loginProcessingUrl("/login")
+//                                .defaultSuccessUrl("/")
+//                                .permitAll()
+//                ).logout(
+//                        logout -> logout
+//                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                                .permitAll()
+//                );
+//        return http.build();
+//    }
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+            .exceptionHandling()
+            .accessDeniedPage("/accessDenied")
+            .and()
+            .formLogin(
+                    form -> form
+                            .loginPage("/login")
+                            .loginProcessingUrl("/login")
+                            .defaultSuccessUrl("/")
+                            .permitAll()
+            ).logout(
+                    logout -> logout
+                            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                            .permitAll()
+            )
+            .authorizeHttpRequests(
+                    (authorize) ->
+                            authorize
+//                                    .mvcMatchers("/users").hasAuthority("ADMIN")
+                                    .mvcMatchers("/asdasdasd").hasAuthority("ADMIN")
+//                                    .mvcMatchers("/products/**").hasAuthority("ADMIN")
+//                                    .mvcMatchers("/users", "").hasRole("ROLE_USER")
+//                                    .mvcMatchers("/register", "/login").permitAll()
+//                                    .mvcMatchers("/logout").hasAuthority("ADMIN")
+//                                    .mvcMatchers("/index").permitAll()
+            );
+    return http.build();
+}
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
