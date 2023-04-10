@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -123,6 +124,20 @@ public class ProductController {
         List<Category> category1 = categoryService.listCategories().stream().filter(cat -> cat.getName().equals(id)).toList();
         List<Product> products = productService.findAll().stream()
                 .filter(product -> product.getCategories().contains(category1.get(0))).collect(Collectors.toList());
+        model.addAttribute("products", products);
+        model.addAttribute("body_content", "product/all-products");
+        return "master-template";
+    }
+    @GetMapping("/filtered/name")
+    private String getProductsFilteredByName(Model model) {
+        List<Product> products= productService.findAll().stream().sorted(Comparator.comparing(Product::getName)).toList();
+        model.addAttribute("products", products);
+        model.addAttribute("body_content", "product/all-products");
+        return "master-template";
+    }
+    @GetMapping("/filtered/price")
+    private String getProductsFilteredByPrice(Model model) {
+        List<Product> products= productService.findAll().stream().sorted(Comparator.comparing(Product::getPrice)).toList();
         model.addAttribute("products", products);
         model.addAttribute("body_content", "product/all-products");
         return "master-template";
