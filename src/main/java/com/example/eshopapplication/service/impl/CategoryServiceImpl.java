@@ -6,6 +6,7 @@ import com.example.eshopapplication.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -50,6 +51,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> searchCategories(String searchText) {
-        return categoryRepository.findAllByNameLike(searchText);
+        return categoryRepository.findAllByName(searchText);
+    }
+
+    @Override
+    public Optional<Category> findByName(String name) {
+        return categoryRepository.findAllByName(name).stream().findFirst();
     }
 }

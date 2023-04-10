@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category,Long> {
-    List<Category> findAllByNameLike(String text);
+    List<Category> findAllByName(String name);
     void deleteByName(String name);
 }

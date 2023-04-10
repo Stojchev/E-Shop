@@ -13,17 +13,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/products")
@@ -62,30 +59,17 @@ public class ProductController {
                                      @RequestParam String description,
                                      @RequestParam Integer quantity,
                                      @RequestParam Double price,
-                                     @RequestParam("photo") MultipartFile photo,
+                                     @RequestParam String photo,
                                      @RequestParam(required = false) List<Integer> categories) throws ProductNotFoundException, IOException {
-        System.out.println(photo.getOriginalFilename());
         List<Category> categoryList = new ArrayList<>();
-        String photoString= StringUtils.cleanPath(Objects.requireNonNull(photo.getOriginalFilename()));
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String fileName = StringUtils.cleanPath(photo.getOriginalFilename());
-        String uploadDir="src/main/java/images/products/"+name;
-        Path path = Paths.get(uploadDir);
-        if (!Files.exists(path)) {
-            Files.createDirectories(path);
-        }
-        Path filePath = Paths.get(uploadDir, fileName);
-        photo.transferTo(filePath);
-
         if (categories != null)
             for (Integer i : categories)
                 categoryList.add(categoryService.listCategories().get(i - 1));
         else categoryList = null;
         if (id != null) {
-            this.productService.edit(id, name, description, quantity, price, photoString, categoryList);
+            this.productService.edit(id, name, description, quantity, price, photo, categoryList);
         } else {
-            productService.save(name, description, quantity, price, photoString, categoryList);
+            productService.save(name, description, quantity, price, photo, categoryList);
         }
         return "redirect:/products/all";
     }
@@ -134,4 +118,13 @@ public class ProductController {
         return "master-template";
     }
 
+    @GetMapping("/{id}")
+    private String getProductsByCategory(@PathVariable String id, Model model) {
+        List<Category> category1 = categoryService.listCategories().stream().filter(cat -> cat.getName().equals(id)).toList();
+        List<Product> products = productService.findAll().stream()
+                .filter(product -> product.getCategories().contains(category1.get(0))).collect(Collectors.toList());
+        model.addAttribute("products", products);
+        model.addAttribute("body_content", "product/all-products");
+        return "master-template";
+    }
 }
